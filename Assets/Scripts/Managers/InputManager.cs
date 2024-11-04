@@ -10,8 +10,9 @@ public class InputManager
     {
         if (GameManager.gameState == GameManager.GameState.Circuit)
         {
-            if (EventSystem.current.IsPointerOverGameObject() && MouseAction != null)
+            if (!EventSystem.current.IsPointerOverGameObject() && MouseAction != null)
             {
+                Debug.Log("PointerOverObject");
                 if (Input.GetMouseButtonDown(0))
                 {
                     MouseAction.Invoke(Define.MouseEvent.Select);

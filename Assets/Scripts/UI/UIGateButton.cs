@@ -13,20 +13,23 @@ public class UIGateButton : UIScene
     {
         MakeButton,
         DeleteButton,
-        TestButton
+        TestButton,
+        StageInfoButton,
     }
     enum Texts
     {
         MakeText,
         DeleteText,
         TestText,
+        StageInfoText,
     }
 
     enum Images
     {
         MakeIcon,
         DeleteIcon,
-        TestIcon
+        TestIcon,
+        StageInfoIcon
     }
     
     enum GameObjects
@@ -76,7 +79,8 @@ public class UIGateButton : UIScene
 
     public void OnObjectDelete(PointerEventData data)
     {
-
+        Debug.Log("Gate Delete Button Called");
+        GameManager.Circuit.Delete();
     }
 
     public void OnTest(PointerEventData data)

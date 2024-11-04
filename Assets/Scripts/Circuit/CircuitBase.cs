@@ -7,10 +7,14 @@ public abstract class CircuitBase : MonoBehaviour
     public abstract void Init();
 
     // Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
+    
+
+    
     public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.MouseEvent type = Define.MouseEvent.Click)
     {
         CircuitHandler handler = Util.GetOrAddComponent<CircuitHandler>(go);
 
+        
         switch(type)
         {
             case Define.MouseEvent.BodyDrag:
@@ -33,5 +37,6 @@ public abstract class CircuitBase : MonoBehaviour
                 handler.OnEndDragHandler += action;
                 break;
         }
+        
     }
 }

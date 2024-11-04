@@ -9,6 +9,8 @@ public class OutputPort : CircuitPort
     private List<InputPort> _connectedInputs = new List<InputPort>();
     private List<LineRenderer> _lines = new List<LineRenderer>();
 
+    public List<InputPort> ConnectedInputs => _connectedInputs;
+    public List<LineRenderer> Lines => _lines;
 
     public override void OnBodyDrag(PointerEventData data)
     {
@@ -119,6 +121,26 @@ public class OutputPort : CircuitPort
 
             Debug.Log("OutputPort Disconnected from inputPort");
         }
+    }
+
+    // 특정 LineRenderer와 연결된 InputPort를 찾아 Disconnect
+    public void DisconnectLine(LineRenderer lineRenderer)
+    {
+        int index = _lines.IndexOf(lineRenderer);
+        if (index != -1 && index < _connectedInputs.Count)
+        {
+            InputPort inputPort = _connectedInputs[index];
+            Disconnect(inputPort);
+        }
+        else
+        {
+            Debug.LogWarning("LineRenderer not found in _lines list.");
+        }
+    }
+
+    public bool HasLine(LineRenderer lineRenderer)
+    {
+        return _lines.Contains(lineRenderer);
     }
     
     public void UpdateLinePosition()

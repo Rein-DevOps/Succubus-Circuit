@@ -48,29 +48,26 @@ public class CircuitManager
     public void Select(GameObject go)
     {
         selectedObj = go;
+        Debug.Log("Gate Selected !");
     }
 
     public void Delete()
     {
-        if (selectedObj == null) return;
+        if (selectedObj == null){
+            Debug.Log("Selected Object is NULL!");
+            return;
+        } 
 
 
         if (selectedObj.layer == LayerMask.NameToLayer("Body"))
         {
-            var inputPortA = selectedObj.transform.Find("InputPortA").GetComponent<InputPort>();
-            var inputPortB = selectedObj.transform.Find("InputPortB").GetComponent<InputPort>();
-            var outputPort = selectedObj.transform.Find("OutputPort").GetComponent<OutputPort>();
-
-            inputPortA.Disconnect(inputPortA.ConnectedOutput);
-            inputPortB.Disconnect(inputPortB.ConnectedOutput);
-            outputPort.DisconnectAll();
-        
-            Circuits.Remove(selectedObj);
-            Object.Destroy(selectedObj);
+            DeleteCircuit(selectedObj);
+            return;
         }
 
         if (selectedObj.layer == LayerMask.NameToLayer("Line"))
         {
+            DeleteLine(selectedObj);
             return;
         }   
     }
@@ -94,9 +91,42 @@ public class CircuitManager
         Object.Destroy(go);
     }
 
-    public void DeleteLine(GameObject go)
+    public void DeleteLine(GameObject lineObj)
     {
+        if (lineObj == null || lineObj.layer != LayerMask.NameToLayer("Line")) return;
 
+        // LineRenderer 컴포넌트 가져오기
+        LineRenderer lineRenderer = lineObj.GetComponent<LineRenderer>();
+        if (lineRenderer == null)
+        {
+            Debug.LogError("LineRenderer not found on lineObj.");
+            return;
+        }
+
+        OutputPort foundOutputPort = null;
+
+        // 모든 회로를 순회하며 해당 LineRenderer를 가진 OutputPort 찾기
+        foreach (var circuit in Circuits)
+        {
+            var outputPort = circuit.transform.Find("OutputPort")?.GetComponent<OutputPort>();
+            if (outputPort != null && outputPort.HasLine(lineRenderer))
+            {
+                foundOutputPort = outputPort;
+                break;
+            }
+        }
+
+        if (foundOutputPort != null)
+        {
+            // 해당 OutputPort에서 LineRenderer와 연결된 InputPort 해제
+            foundOutputPort.DisconnectLine(lineRenderer);
+            // Line 오브젝트 삭제
+            Object.Destroy(lineObj);
+        }
+        else
+        {
+            Debug.LogError("No OutputPort found with the given LineRenderer.");
+        }
     }
 
     public void DeleteSwitches()

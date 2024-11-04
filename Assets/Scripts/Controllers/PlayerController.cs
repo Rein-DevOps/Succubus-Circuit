@@ -2,6 +2,7 @@ using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +24,14 @@ public class PlayerController : MonoBehaviour
 
     void OnMouseClicked(Define.MouseEvent evt)
     {
+        /*
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("Clicked on UI element. Selection ignored.");
+            return;
+        }
+        */
+        
         Debug.Log("On Mouse Click Called");
         if (evt == Define.MouseEvent.Select)
         {
@@ -64,14 +73,18 @@ public class PlayerController : MonoBehaviour
                     line.endColor = pink;
                 }
 
+                Debug.Log("Gate Select Called!");
                 GameManager.Circuit.Select(selectedObject);
             }
 
+
+            /*
             else if (Physics2D.Raycast(mousePos, Vector2.zero, 20.0f, LayerMask.GetMask("Line")))
             {
                 selectedType = SelectedType.Line;
                 GameObject clickedBody = hit.transform.gameObject;
             }
+            */
         }
 
         if (evt == Define.MouseEvent.Click)
