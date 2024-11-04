@@ -1,0 +1,48 @@
+{
+    "stages": [
+      {
+        "stageNumber": 1,
+        "gateType": "NotGate",
+        "inputs": [
+          [0, 1]
+        ],
+        "outputs": [
+          [1, 0]
+        ]
+      },
+      {
+        "stageNumber": 2,
+        "gateType": "AndGate",
+        "inputs": [
+          [0, 0, 1, 1],
+          [0, 1, 0, 1]
+        ],
+        "outputs": [
+          [0, 0, 0, 1]
+        ]
+      },
+      {
+        "stageNumber": 3,
+        "gateType": "OrGate",
+        "inputs": [
+          [0, 0, 1, 1],
+          [0, 1, 0, 1]
+        ],
+        "outputs": [
+          [0, 1, 1, 1]
+        ]
+      },
+      {
+        "stageNumber": 4,
+        "gateType": "XorGate",
+        "inputs": [
+          [0, 0, 1, 1],
+          [0, 1, 0, 1]
+        ],
+        "outputs": [
+          [0, 1, 1, 0]
+        ]
+      }
+    ]
+  }
+  
