@@ -26,12 +26,12 @@
           {
             "speaker": "Player",
             "expression": "Normal",
-            "text": "이때 나타나는 영혼이나 육체는 마법진을 통과하면서 계속 같은 모습으로 다른 마법진에 들어가더라도 변하지 않아."
+            "text": "그리고 나타난 영혼이나 육체는, 수정에서 추출해도 본질이 변하지 않아. 여러 마법진에 들어가도 동일한 모습 그대로 전달되지."
           },
           {
             "speaker": "Player",
             "expression": "Normal",
-            "text": "즉, 본질이 그대로 유지되는 거지."
+            "text": "즉, 그 자체가 하나의 에너지원이 되어서 여러 입력으로 흘러갈 수 있다는 뜻이지."
           },
           {
             "speaker": "Player",
@@ -41,7 +41,7 @@
           {
             "speaker": "Player",
             "expression": "Normal",
-            "text": "우선, 이 영혼과 육신이 "
+            "text": "우선 영혼을 넣었을 때 육체가, 육체를 넣었을 때 영혼이 나타나는 마법진을 구성해보자."
           }
         ]
       },
@@ -51,7 +51,7 @@
           {
             "speaker": "Player",
             "expression": "Confident",
-            "text": "첫 번째 스테이지를 클리어했어!"
+            "text": ""
           },
           {
             "speaker": "Succubus",

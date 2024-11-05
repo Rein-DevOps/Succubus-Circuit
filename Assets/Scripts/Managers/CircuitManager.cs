@@ -8,24 +8,27 @@ public class CircuitManager
     public GameObject outcome;
     public List<GameObject> Switches = new();
 
+    private GameObject _gateRoot;
     public GameObject GateRoot
     {
         get
         {
-            GameObject gateRoot = GameObject.Find("@GateRoot");
-
-            if (gateRoot == null)
+            if (_gateRoot == null)
             {
-                gateRoot = new GameObject { name = "@GateRoot" };
+                _gateRoot = GameObject.Find("@GateRoot");
+                if (_gateRoot == null)
+                {
+                    _gateRoot = new GameObject { name = "@GateRoot" };
+                }
             }
-            return gateRoot;
+            return _gateRoot;
         }
     }
 
     public void Init()
     {
         Clear();
-
+        var root = GateRoot;
     }
 
     public void InstantiateCircuit(string path = "Gates/NandGate")
@@ -35,36 +38,36 @@ public class CircuitManager
         Circuits.Add(go);
     }
 
-    public void ConfigureStage(StageData stageData)
-    {
-        // 스위치 생성 및 데이터 설정
-        for (int i = 0; i < stageData.inputs.Count; i++)
-        {
-            GameObject switchObj = Switches[i];
-            Switch swt = switchObj.GetComponent<Switch>();
-            List<bool> inputData = new List<bool>();
-            foreach (int val in stageData.inputs[i])
-            {
-                inputData.Add(val == 1);
-            }
-            swt.SetDataSequence(inputData);
-        }
+    // public void ConfigureStage(StageData stageData)
+    // {
+    //     // 스위치 생성 및 데이터 설정
 
-        // 아웃컴에 정답 설정
-        GameObject outcomeObj = InstantiateOutcome();
-        Outcome outcome = outcomeObj.GetComponent<Outcome>();
-        List<bool> outputData = new List<bool>();
-        foreach (int val in stageData.outputs[0])
-        {
-            outputData.Add(val == 1);
-        }
-        outcome.SetAnswerList(outputData);
+    //     InstantiateSwitches(stageData.inputs.Count);
 
-        // 필요한 게이트 생성
-        InstantiateGate(stageData.gateType);
+    //     for (int i = 0; i < stageData.inputs.Count; i++)
+    //     {
+    //         GameObject switchObj = Switches[i];
+    //         Switch swt = switchObj.GetComponent<Switch>();
+    //         List<bool> inputData = new List<bool>();
+    //         foreach (int val in stageData.inputs[i])
+    //         {
+    //             inputData.Add(val == 1);
+    //         }
+    //         swt.SetDataSequence(inputData);
+    //     }
 
-        // 회로 연결은 플레이어가 직접 구성하므로 여기서는 생성만 합니다.
-    }
+    //     // 아웃컴에 정답 설정
+    //     GameObject outcomeObj = InstantiateOutcome(stageData.outputs.Count);
+    //     OutCome outcome = outcomeObj.GetComponent<OutCome>();
+    //     List<bool> outputData = new List<bool>();
+    //     foreach (int val in stageData.outputs[0])
+    //     {
+    //         outputData.Add(val == 1);
+    //     }
+    //     outcome.SetAnswerList(outputData);
+
+    //     // 회로 연결은 플레이어가 직접 구성하므로 여기서는 생성만 합니다.
+    // }
 
 
     public void InstantiateSwitches(int switchNumber)
@@ -88,24 +91,33 @@ public class CircuitManager
         }
     }
 
-    public void InstantiateOutcome(int num = 1)
-    {
-        string path = "Prefabs/Gates/OutCome";
-        Debug.Log("Outcome Maked");
+    // public GameObject InstantiateOutcome(int num = 1)
+    // {
+    //     string path = "Prefabs/Gates/OutCome";
+    //     Debug.Log("Outcome Maked");
 
-        // 기준 위치
-        float yPosition = 4.0f;
-        float xOffset = 1.0f; // x 간격의 절반값
+    //     // 기준 위치
+    //     float yPosition = 4.0f;
+    //     float xOffset = 1.0f; // x 간격의 절반값
 
-        for (int i = 0; i < num; i++)
-        {
-            float xPosition = (i - (num - 1) / 2.0f) * 2.0f * xOffset;
+    //     // 우선 하나만 있다고 보고
 
-            GameObject go = GameManager.Resource.Instantiate(path, GateRoot.transform);
-            go.transform.position = new Vector3(xPosition, yPosition, 0);
-            Circuits.Add(go);
-        }
-}
+    //     // for (int i = 0; i < num; i++)
+    //     // {
+    //     //     float xPosition = (i - (num - 1) / 2.0f) * 2.0f * xOffset;
+
+    //     //     GameObject go = GameManager.Resource.Instantiate(path, GateRoot.transform);
+    //     //     go.transform.position = new Vector3(xPosition, yPosition, 0);
+    //     //     Circuits.Add(go);
+    //     // }
+
+    //     float xPosition = 0;
+
+    //     GameObject go = GameManager.Resource.Instantiate(path, GateRoot.transform);
+    //     go.transform.position = new Vector3(xPosition, yPosition, 0);
+    //     Circuits.Add(go);
+    //     return go;
+    // }
 
     public void Select(GameObject go)
     {
@@ -226,6 +238,7 @@ public class CircuitManager
 
     public void Test()
     {
+        // foreach()
         foreach (var swt in Switches)
         {
             //swt.GetComponent<Switch>().SetDataSequence

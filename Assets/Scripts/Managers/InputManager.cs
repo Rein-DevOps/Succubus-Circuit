@@ -9,7 +9,7 @@ public class InputManager
 
     public void OnUpdate()
     {
-        if (GameManager.gameState == GameManager.GameState.Circuit)
+        if (GameManager.currScene == Define.Scene.Game)
         {
             if (Input.GetMouseButtonDown(0))
             {

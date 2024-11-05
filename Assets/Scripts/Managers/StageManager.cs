@@ -6,32 +6,33 @@ public class StageManager
     public int stageNum = 0;
     private DataManager _dataManager = new DataManager();
 
-    public void LoadStage(int stageNumber)
-    {
-        stageNum = stageNumber;
-        // 스테이지 데이터를 로드
-        StageData stageData = GameManager.Data.GetStageData(stageNum);
+    // public void LoadStage(int stageNumber)
+    // {
+    //     // 스테이지 데이터를 로드
+    //     StageData stageData = GameManager.Data.GetStageData(stageNumber);
 
-        if (stageData != null)
-        {
-            // 회로 초기화
-            GameManager.Circuit.Init();
+    //     if (stageData != null)
+    //     {
+    //         // 회로 초기화
+    //         GameManager.Circuit.Init();
 
-            // 스위치 및 아웃컴 생성
-            GameManager.Circuit.InstantiateSwitches(stageData.inputs.Count);
-            GameManager.Circuit.InstantiateOutcome(1); // Outcome은 1개로 가정
+    //         // 스위치 및 아웃컴 생성
+    //         // GameManager.Circuit.InstantiateSwitches(stageData.inputs.Count);
+            
+    //         // // ToDo - 추후 수정할 것
+    //         // GameManager.Circuit.InstantiateOutcome(1); // Outcome은 1개로 가정
 
-            // 스테이지 정보를 CircuitManager에 전달하여 회로 구성
-            GameManager.Circuit.ConfigureStage(stageData);
+    //         // 스테이지 정보를 CircuitManager에 전달하여 회로 구성
+    //         GameManager.Circuit.ConfigureStage(stageData);
 
-            // 게임 씬 로드
-            SceneManager.LoadScene(1);
-        }
-        else
-        {
-            Debug.LogError($"Stage {stageNum} data not found.");
-        }
-    }
+    //         // 게임 씬 로드
+    //         SceneManager.LoadScene(1);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError($"Stage {stageNum} data not found.");
+    //     }
+    // }
 
     public void Clear()
     {

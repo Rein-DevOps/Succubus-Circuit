@@ -14,10 +14,10 @@ public class GameManager : MonoBehaviour
 
     static GameManager s_instance;
     static GameManager Instance { get { Init(); return s_instance; } }
-    public static GameState gameState = GameState.Unknown;
+    public static Define.Scene currScene = Define.Scene.Unknown;
 
     CircuitManager _circuit = new CircuitManager();
-    DataManager _data = new DataManager();
+    // DataManager _data = new DataManager();
     InputManager _input = new InputManager();
     
     UIManager _ui = new UIManager();
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     StageManager _stage = new StageManager();
     
     public static CircuitManager Circuit { get { return Instance._circuit; } }
-    public static DataManager Data { get { return Instance._data; } }
+    // public static DataManager Data { get { return Instance._data; } }
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static InputManager Input {get {return Instance._input;}}
     public static UIManager UI { get { return Instance._ui; }}
@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Init();
-        Debug.Log($"gameState: {gameState}");
+        currScene = Define.Scene.Game;
+        Circuit.Init();
+        Debug.Log($"CurrScene: {currScene}");
     }
 
     void Update()
@@ -58,9 +60,9 @@ public class GameManager : MonoBehaviour
             }
             DontDestroyOnLoad(gameManager);
             s_instance = gameManager.GetComponent<GameManager>();
-            gameState = GameState.Menu;
         }
     }
+
 
     public static void Clear()
     {
@@ -76,12 +78,23 @@ public class GameManager : MonoBehaviour
 
         if (scene == Define.Scene.Game)
         {
-            Stage.LoadStage(stageNum);
+            SceneManager.LoadScene(1);
+            // Stage.LoadStage(stageNum);
         }
     }
 
-    public static void BgmSoundChange()
+    public static void BgmSoundChange(Define.Scene scene)
     {
+        if (scene == currScene) return;
 
+        if (scene == Define.Scene.Menu)
+        {
+            Sound.Play("Sounds/Bgm/MainBgm");
+        }
+
+        if (scene == Define.Scene.Game)
+        {
+            Sound.Play("Sounds/Bgm/CircuitBgm");
+        }
     }
 }
