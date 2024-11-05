@@ -12,32 +12,64 @@ public class GameManager : MonoBehaviour
         Circuit,
     }
 
-    static GameManager s_instance;
-    static GameManager Instance { get { Init(); return s_instance; } }
+    private static GameManager s_instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (s_instance == null)
+            {
+                s_instance = FindObjectOfType<GameManager>();
+                if (s_instance == null)
+                {
+                    GameObject gameManager = new GameObject("@GameManager");
+                    s_instance = gameManager.AddComponent<GameManager>();
+                    DontDestroyOnLoad(gameManager);
+                }
+            }
+            return s_instance;
+        }
+    }
     public static Define.Scene currScene = Define.Scene.Menu;
 
-    CircuitManager _circuit = new CircuitManager();
-    // DataManager _data = new DataManager();
-    InputManager _input = new InputManager();
-    
-    UIManager _ui = new UIManager();
-    ResourceManager _resource = new ResourceManager();
-    SoundManager _sound = new SoundManager();
-    StageManager _stage = new StageManager();
-    
-    public static CircuitManager Circuit { get { return Instance._circuit; } }
-    // public static DataManager Data { get { return Instance._data; } }
-    public static ResourceManager Resource { get { return Instance._resource; } }
-    public static InputManager Input {get {return Instance._input;}}
-    public static UIManager UI { get { return Instance._ui; }}
-    public static SoundManager Sound { get { return Instance._sound; }}
-    public static StageManager Stage { get { return Instance._stage; }}
+    CircuitManager _circuit;
+    InputManager _input;
+    UIManager _ui;
+    ResourceManager _resource;
+    SoundManager _sound;
+    StageManager _stage;
 
-    
+    public static CircuitManager Circuit { get { return Instance._circuit; } }
+    public static ResourceManager Resource { get { return Instance._resource; } }
+    public static InputManager Input { get { return Instance._input; } }
+    public static UIManager UI { get { return Instance._ui; } }
+    public static SoundManager Sound { get { return Instance._sound; } }
+    public static StageManager Stage { get { return Instance._stage; } }
+
+    void Awake()
+    {
+        if (s_instance == null)
+        {
+            s_instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            // Initialize manager instances
+            _circuit = new CircuitManager();
+            _input = new InputManager();
+            _ui = new UIManager();
+            _resource = new ResourceManager();
+            _sound = new SoundManager();
+            _stage = new StageManager();
+        }
+        else if (s_instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
-        Init();
-        currScene = Define.Scene.Stage1;
+        currScene = Define.Scene.Menu;
         Circuit.Init();
         Debug.Log($"CurrScene: {currScene}");
     }
@@ -46,23 +78,6 @@ public class GameManager : MonoBehaviour
     {
         _input.OnUpdate();
     }
-
-    static void Init()
-    {
-        if (s_instance == null)
-        {
-            GameObject gameManager = GameObject.Find("@GameManager");
-
-            if (gameManager == null)
-            {
-                gameManager  = new GameObject {name = "@GameManager"};
-                gameManager.AddComponent<GameManager>();
-            }
-            DontDestroyOnLoad(gameManager);
-            s_instance = gameManager.GetComponent<GameManager>();
-        }
-    }
-
 
     public static void Clear()
     {
@@ -76,16 +91,11 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(0);
             currScene = Define.Scene.Menu;
         }
-
-        if (scene != Define.Scene.Menu)
+        else
         {
             Clear();
             SceneManager.LoadScene((int)scene);
-            // Circuit.InstantiateSwitches(stageNum);
-
-            //BgmSoundChange((Define.Scene) stageNum);
-            currScene = (Define.Scene) stageNum;
-            // Stage.LoadStage(stageNum);
+            currScene = (Define.Scene)stageNum;
         }
     }
 
@@ -93,15 +103,13 @@ public class GameManager : MonoBehaviour
     {
         if (scene == currScene) return;
 
-        // 추후 지울 것. 임시적으로 사용.
-        if ((int) currScene > 0 && (int) scene > 0) return;
+        if ((int)currScene > 0 && (int)scene > 0) return;
 
         if (scene == Define.Scene.Menu)
         {
             Sound.Play("Sounds/Bgm/MainBgm");
         }
-
-        if (scene != Define.Scene.Menu)
+        else
         {
             Sound.Play("Sounds/Bgm/CircuitBgm");
         }
