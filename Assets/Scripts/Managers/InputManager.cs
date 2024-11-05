@@ -9,10 +9,11 @@ public class InputManager
 
     public void OnUpdate()
     {
-        if (GameManager.currScene == Define.Scene.Game)
+        if (GameManager.currScene != Define.Scene.Menu)
         {
             if (Input.GetMouseButtonDown(0))
             {
+                Debug.Log("Click Called!");
                 // Perform a Raycast to check if pointer is over UI
                 if (IsPointerOverUIElement())
                 {

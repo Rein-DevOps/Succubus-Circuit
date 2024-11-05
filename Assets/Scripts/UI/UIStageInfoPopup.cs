@@ -54,8 +54,8 @@ public class UIStageInfoPopup : UIPopup
 
         
         GameObject popupDeleteObject = GetButton((int) Buttons.StageInfoPopupDeleteButton).gameObject;
-        //popupDeleteButton.onClick.AddListener(OnPopupDelete);
-        Get<GameObject>((int) GameObjects.StageInfoPopupText).GetComponent<TextMeshProUGUI>().text = $"Test";
+        // popupDeleteButton.onClick.AddListener(OnPopupDelete);
+        // Get<GameObject>((int) GameObjects.StageInfoPopupText).GetComponent<TextMeshProUGUI>().text = $"Test";
 
         BindEvent(popupDeleteObject, OnPopupDelete, Define.UIEvent.Click);
     

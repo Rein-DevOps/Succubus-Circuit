@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UISuccessPanel : UIPopup
@@ -16,7 +17,7 @@ public class UISuccessPanel : UIPopup
         SuccessText,
     }
 
-    int _score = 0;
+    // int _score = 0;
 
     void Start()
     {
@@ -56,11 +57,23 @@ public class UISuccessPanel : UIPopup
     public void OnNext(PointerEventData data)
     {
         Debug.Log("Gate Make Button Called");
-        GameManager.Circuit.InstantiateCircuit();
+        int currScene = SceneManager.GetActiveScene().buildIndex;
+
+        if ((int) Define.Scene.LastScene >= currScene + 1)
+        {
+            GameManager.SceneChange((Define.Scene) currScene + 1, currScene + 1);
+        }
+        else
+        {
+            GameManager.SceneChange(Define.Scene.Menu);
+        }
     }
     public void OnReplay(PointerEventData data)
     {
         Debug.Log("Gate Make Button Called");
-        GameManager.Circuit.InstantiateCircuit();
+        int currScene = SceneManager.GetActiveScene().buildIndex;
+
+        Debug.LogError($"CurrScene: {currScene}");
+        GameManager.SceneChange((Define.Scene) currScene, currScene);
     }
 }

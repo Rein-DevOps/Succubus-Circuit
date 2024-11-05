@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Switch : GateBase
 {
-    private List<bool> _dataSequence = new List<bool>();
+    public List<bool> _dataSequence = new List<bool>();
     private int _currentIndex = 0;
 
     protected override void Init()
@@ -12,11 +12,10 @@ public class Switch : GateBase
         _calculated = true; // 초기 상태 설정
 
         // Local로 데이터 정해줌. 추후 구현 후 삭제할 것
-        _dataSequence.Add(true);
-        _dataSequence.Add(false);
-        _dataSequence.Add(true);
-        _dataSequence.Add(false);
 
+
+
+        GameManager.Circuit.SetSwitch(gameObject);
         SetDataSequence(_dataSequence);
         Debug.Log($"{gameObject.name} initialized with {_dataSequence.Count} data points.");
     }
@@ -61,6 +60,10 @@ public class Switch : GateBase
             connectedGate.SetData(_result);
         }
         LocalTestEnd();
+        if (_currentIndex == _dataSequence.Count)
+        {
+            TestEnd();
+        }
     }
 
     public override void LocalTestEnd()
@@ -73,4 +76,6 @@ public class Switch : GateBase
         base.TestEnd();
         _currentIndex = 0;
     }
+
+
 }

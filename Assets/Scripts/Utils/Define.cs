@@ -5,9 +5,12 @@ public class Define
 {
     public enum Scene
     {
-        Unknown,
         Menu,
-        Game
+        Stage1,
+        // Stage2,
+        // Stage3,
+        // Stage4,
+        LastScene,
     }
 
     public enum MouseEvent

@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     static GameManager s_instance;
     static GameManager Instance { get { Init(); return s_instance; } }
-    public static Define.Scene currScene = Define.Scene.Unknown;
+    public static Define.Scene currScene = Define.Scene.Menu;
 
     CircuitManager _circuit = new CircuitManager();
     // DataManager _data = new DataManager();
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Init();
-        currScene = Define.Scene.Game;
+        currScene = Define.Scene.Stage1;
         Circuit.Init();
         Debug.Log($"CurrScene: {currScene}");
     }
@@ -69,16 +69,22 @@ public class GameManager : MonoBehaviour
         Circuit.Clear();
     }
 
-    public static void SceneChange(Define.Scene scene = Define.Scene.Unknown, int stageNum = 0)
+    public static void SceneChange(Define.Scene scene = Define.Scene.Menu, int stageNum = 0)
     {
         if (scene == Define.Scene.Menu)
         {
             SceneManager.LoadScene(0);
+            currScene = Define.Scene.Menu;
         }
 
-        if (scene == Define.Scene.Game)
+        if (scene != Define.Scene.Menu)
         {
-            SceneManager.LoadScene(1);
+            Clear();
+            SceneManager.LoadScene((int)scene);
+            // Circuit.InstantiateSwitches(stageNum);
+
+            //BgmSoundChange((Define.Scene) stageNum);
+            currScene = (Define.Scene) stageNum;
             // Stage.LoadStage(stageNum);
         }
     }
@@ -87,12 +93,15 @@ public class GameManager : MonoBehaviour
     {
         if (scene == currScene) return;
 
+        // 추후 지울 것. 임시적으로 사용.
+        if ((int) currScene > 0 && (int) scene > 0) return;
+
         if (scene == Define.Scene.Menu)
         {
             Sound.Play("Sounds/Bgm/MainBgm");
         }
 
-        if (scene == Define.Scene.Game)
+        if (scene != Define.Scene.Menu)
         {
             Sound.Play("Sounds/Bgm/CircuitBgm");
         }

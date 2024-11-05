@@ -9,6 +9,13 @@ public class UIGateButton : UIScene
 {
     
     public List<Switch> switches = new();
+    public GameObject SuccessPanel;
+    public OutCome outCome;
+    public List<Switch> swts = new();
+
+    public List<AudioClip> successAudioClips = new();
+    public List<AudioClip> failAudioClips = new();
+    AudioSource audioSource;
 
     [SerializeField]
     TextMeshProUGUI _text;
@@ -20,6 +27,7 @@ public class UIGateButton : UIScene
         TestButton,
         StageInfoButton,
         MenuButton,
+        HelpButton,
     }
 
     enum Images
@@ -35,6 +43,7 @@ public class UIGateButton : UIScene
     void Start()
     {
         Init();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void OnButtonClicked(PointerEventData data)
@@ -58,12 +67,14 @@ public class UIGateButton : UIScene
         GameObject TestObject = GetButton((int) Buttons.TestButton).gameObject;
         GameObject StageInfoObject = GetButton((int) Buttons.StageInfoButton).gameObject;
         GameObject menuObject = GetButton((int) Buttons.MenuButton).gameObject;
+        GameObject helpObject = GetButton((int) Buttons.HelpButton).gameObject;
 
         BindEvent(makeObject, OnGateMake, Define.UIEvent.Click);
         BindEvent(DeleteObject, OnObjectDelete, Define.UIEvent.Click);
         BindEvent(TestObject, OnTest, Define.UIEvent.Click);
         BindEvent(StageInfoObject, OnStageInfo, Define.UIEvent.Click);
         BindEvent(menuObject, OnMenuActive, Define.UIEvent.Click);
+        BindEvent(helpObject, OnHelpActive, Define.UIEvent.Click);
     }
 
     public void OnGateMake(PointerEventData data)
@@ -80,10 +91,33 @@ public class UIGateButton : UIScene
 
     public void OnTest(PointerEventData data)
     {
-        foreach(var Switch in switches)
+        GameManager.Circuit.Test();
+        if (GameManager.Circuit.IsCorrect)
         {
-            Switch.LocalTest();
+            SuccessPanel.SetActive(true);
+            if (successAudioClips.Count > 0)
+            {
+                int randomIndex = Random.Range(0, successAudioClips.Count);
+                audioSource.clip = successAudioClips[randomIndex];
+                audioSource.Play();
+            }
         }
+        else
+        {
+            // 실패 시 failAudioClips 중 랜덤 오디오 재생
+            if (failAudioClips.Count > 0)
+            {
+                int randomIndex = Random.Range(0, failAudioClips.Count);
+                audioSource.clip = failAudioClips[randomIndex];
+                audioSource.Play();
+            }
+        }
+        outCome.TestEnd();
+        foreach (var swt in swts)
+        {
+            swt.TestEnd();
+        }
+
     }
 
     public void OnStageInfo(PointerEventData data)
@@ -100,5 +134,13 @@ public class UIGateButton : UIScene
     {
         Transform stageMenu = transform.Find("StageMenu");
         stageMenu.gameObject.SetActive(true);
+    }
+    public void OnHelpActive(PointerEventData data)
+    {
+        Transform helpPopup = transform.Find("StageHelpPopup");
+        helpPopup.gameObject.SetActive(true);
+        AudioSource audioSource = helpPopup.GetComponent<AudioSource>();
+        audioSource.time = 0.6f;
+        audioSource.Play();
     }
 }

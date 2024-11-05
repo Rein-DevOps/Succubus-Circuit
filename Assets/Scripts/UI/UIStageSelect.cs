@@ -21,8 +21,8 @@ public class UIStageSelect : MonoBehaviour
     {
         for (int i = 0; i < stageButtons.Count; i++)
         {
-            int stageNum = i; // 로컬 변수를 만들어 현재 인덱스를 캡처합니다.
-            stageButtons[i].onClick.AddListener(() => OnStageButtonClicked(stageNum));
+            int stageNum = i; // 로컬 변수를 만들어 현재 인덱스를 캡처
+            stageButtons[i].onClick.AddListener(() => OnStageButtonClicked(stageNum + 1));
         }
 
         returnButton.onClick.AddListener(OnReturnButtonClicked);
@@ -37,7 +37,7 @@ public class UIStageSelect : MonoBehaviour
 
     public void OnStageButtonClicked(int stageNum)
     {
-        Debug.Log($"Stage {stageNum + 1} selected");
-        GameManager.SceneChange(Define.Scene.Game, stageNum);
+        Debug.Log($"Stage {stageNum} selected");
+        GameManager.SceneChange((Define.Scene) stageNum, stageNum);
     }
 }

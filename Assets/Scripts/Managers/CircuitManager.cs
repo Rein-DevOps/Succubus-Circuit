@@ -7,8 +7,11 @@ public class CircuitManager
     private List<GameObject> Circuits = new();
     public GameObject outcome;
     public List<GameObject> Switches = new();
+    public bool IsCorrect = false;
+    
 
     private GameObject _gateRoot;
+    
     public GameObject GateRoot
     {
         get
@@ -29,6 +32,11 @@ public class CircuitManager
     {
         Clear();
         var root = GateRoot;
+    }
+
+    public void SetSwitch(GameObject swt)
+    {
+        Switches.Add(swt);
     }
 
     public void InstantiateCircuit(string path = "Gates/NandGate")
@@ -70,13 +78,35 @@ public class CircuitManager
     // }
 
 
-    public void InstantiateSwitches(int switchNumber)
+    public void InstantiateSwitches(int stageNumber)
     {
         string path = "Prefabs/Gates/Switch";
         Debug.Log("Switches Created");
 
         float yPosition = -4.0f;
         float xOffset = 1.0f; // x 간격의 절반값 (간격이 2이므로)
+
+        int switchNumber = 1;
+
+
+        // switch (stageNumber)
+        // {
+        //     case 1:
+        //         switchNumber = 1;
+        //     break;
+
+        //     case 2:
+        //         switchNumber = 2;
+        //     break;
+
+        //     case 3:
+        //         switchNumber = 2;
+        //     break;
+
+        //     case 4:
+        //         switchNumber = 2;
+        //     break;
+        // }
 
         for (int i = 0; i < switchNumber; i++)
         {
@@ -229,19 +259,33 @@ public class CircuitManager
 
     public void Clear()
     {
-        foreach(var go in Circuits)
-        {
-            DeleteCircuit(go);
-        }
+        // foreach(var go in Circuits)
+        // {
+        //     DeleteCircuit(go);
+        // }
+        Switches.Clear();
         Circuits.Clear();
     }
 
     public void Test()
     {
-        // foreach()
-        foreach (var swt in Switches)
+        Debug.LogWarning($"Test Start. {Switches[0].GetComponent<Switch>()._dataSequence.Count}");
+        for(int i = 0; i < Switches[0].GetComponent<Switch>()._dataSequence.Count; i++)
         {
-            //swt.GetComponent<Switch>().SetDataSequence
+            foreach(var swt in Switches)
+            {
+                swt.GetComponent<Switch>().LocalTest();
+            }
         }
+
+        // Clear();
+    }
+
+    public bool TestEnd(OutCome outCome, int expected, int correct)
+    {
+        Debug.LogWarning($"Expected: {expected} Correct: {correct}");
+        IsCorrect = (expected == correct);
+        
+        return IsCorrect;
     }
 }

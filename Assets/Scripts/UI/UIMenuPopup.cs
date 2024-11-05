@@ -36,7 +36,7 @@ public class UIMenuPopup : UIPopup
 
     public void OnHome(PointerEventData data)
     {
-
+        GameManager.SceneChange(Define.Scene.Menu);
         
     }
 
