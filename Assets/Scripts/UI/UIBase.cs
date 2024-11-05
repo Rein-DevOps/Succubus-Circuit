@@ -76,8 +76,6 @@ public abstract class UIBase : MonoBehaviour
                 evt.OnClickHandler += action;
                 break;
         }
-
-        // evt.OnDragHandler += (PointerEventData data) => {evt.gameObject.transform.position = data.position;};
     }
 }
 

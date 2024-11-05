@@ -32,10 +32,10 @@ public class PlayerController : MonoBehaviour
         }
         */
         
-        Debug.Log("On Mouse Click Called");
+        // Debug.Log("On Mouse Click Called");
         if (evt == Define.MouseEvent.Select)
         {
-            Debug.Log("On Mouse Select Called");
+            // Debug.Log("On Mouse Select Called");
             Deselect(selectedObject);
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
                 int hitLayer = hit.collider.gameObject.layer;
                 if (hitLayer == LayerMask.NameToLayer("Body"))
                 {
-                    Debug.Log("On Body Select Called");
+                    // Debug.Log("On Body Select Called");
                     selectedType = SelectedType.Body;
                     GameObject clickedBody = hit.transform.gameObject;
                     selectedObject = clickedBody;
@@ -58,11 +58,13 @@ public class PlayerController : MonoBehaviour
                     {
                         selectedCircle.gameObject.SetActive(true);
                     }
+                    // Debug.Log("Gate Select Called!");
+                    GameManager.Circuit.Select(selectedObject);
                 }
 
-                else if (hitLayer == LayerMask.NameToLayer("Line"))
+                if (hitLayer == LayerMask.NameToLayer("Line"))
                 {
-                    Debug.Log("On Line Select Called");
+                    // Debug.Log("On Line Select Called");
                     selectedType = SelectedType.Line;
                     GameObject ClickedLine = hit.transform.gameObject;
                     selectedObject = ClickedLine;
@@ -71,10 +73,12 @@ public class PlayerController : MonoBehaviour
                     Color pink = new Color(255 / 255f, 0 / 255f, 177 / 255f, 1f);
                     line.startColor = pink;
                     line.endColor = pink;
+
+                    // Debug.Log("Line Select Called!");
+                    GameManager.Circuit.Select(selectedObject);
                 }
 
-                Debug.Log("Gate Select Called!");
-                GameManager.Circuit.Select(selectedObject);
+
             }
 
 
@@ -95,6 +99,9 @@ public class PlayerController : MonoBehaviour
 
     void Deselect(GameObject go = null)
     {
+        if (go == null) return;
+
+        Debug.Log("Deselect Called !");
         switch(selectedType)
         {
             case SelectedType.None:

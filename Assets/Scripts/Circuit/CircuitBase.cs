@@ -8,12 +8,9 @@ public abstract class CircuitBase : MonoBehaviour
 
     // Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
     
-
-    
     public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.MouseEvent type = Define.MouseEvent.Click)
     {
         CircuitHandler handler = Util.GetOrAddComponent<CircuitHandler>(go);
-
         
         switch(type)
         {
@@ -37,6 +34,5 @@ public abstract class CircuitBase : MonoBehaviour
                 handler.OnEndDragHandler += action;
                 break;
         }
-        
     }
 }

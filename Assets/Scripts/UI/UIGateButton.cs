@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,6 +8,8 @@ using UnityEngine.UI;
 public class UIGateButton : UIScene
 {
     
+    public List<Switch> switches = new();
+
     [SerializeField]
     TextMeshProUGUI _text;
 
@@ -15,13 +19,7 @@ public class UIGateButton : UIScene
         DeleteButton,
         TestButton,
         StageInfoButton,
-    }
-    enum Texts
-    {
-        MakeText,
-        DeleteText,
-        TestText,
-        StageInfoText,
+        MenuButton,
     }
 
     enum Images
@@ -30,11 +28,6 @@ public class UIGateButton : UIScene
         DeleteIcon,
         TestIcon,
         StageInfoIcon
-    }
-    
-    enum GameObjects
-    {
-        
     }
 
     int _score = 0;
@@ -54,8 +47,6 @@ public class UIGateButton : UIScene
         base.Init();
 
         Bind<Button>(typeof(Buttons));
-        Bind<TextMeshProUGUI>(typeof(Texts));
-        Bind<GameObject>(typeof(GameObjects));
         Bind<Image>(typeof(Images));
 
         // GetText((int) Texts.ScoreText).text = "Bind Test";
@@ -65,10 +56,14 @@ public class UIGateButton : UIScene
         GameObject makeObject = GetButton((int) Buttons.MakeButton).gameObject;
         GameObject DeleteObject = GetButton((int) Buttons.DeleteButton).gameObject;
         GameObject TestObject = GetButton((int) Buttons.TestButton).gameObject;
+        GameObject StageInfoObject = GetButton((int) Buttons.StageInfoButton).gameObject;
+        GameObject menuObject = GetButton((int) Buttons.MenuButton).gameObject;
 
         BindEvent(makeObject, OnGateMake, Define.UIEvent.Click);
         BindEvent(DeleteObject, OnObjectDelete, Define.UIEvent.Click);
         BindEvent(TestObject, OnTest, Define.UIEvent.Click);
+        BindEvent(StageInfoObject, OnStageInfo, Define.UIEvent.Click);
+        BindEvent(menuObject, OnMenuActive, Define.UIEvent.Click);
     }
 
     public void OnGateMake(PointerEventData data)
@@ -85,6 +80,25 @@ public class UIGateButton : UIScene
 
     public void OnTest(PointerEventData data)
     {
+        foreach(var Switch in switches)
+        {
+            Switch.LocalTest();
+        }
+    }
 
+    public void OnStageInfo(PointerEventData data)
+    {
+        Transform stageInfo = transform.Find("StageInfoPopup");
+        
+        stageInfo.gameObject.SetActive(true);
+        AudioSource audioSource = stageInfo.GetComponent<AudioSource>();
+        audioSource.time = 0.6f;
+        audioSource.Play();;
+    }
+
+    public void OnMenuActive(PointerEventData data)
+    {
+        Transform stageMenu = transform.Find("StageMenu");
+        stageMenu.gameObject.SetActive(true);
     }
 }

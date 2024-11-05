@@ -13,7 +13,14 @@ public abstract class CircuitPort : CircuitBase
     protected GameObject _parentObject;
     protected bool _isDragging = false;
 
-    
+    protected AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip dragAudioClip;
+    [SerializeField]
+    private AudioClip dropAudioClip;
+    [SerializeField]
+    private AudioClip connectAudioClip;
 
     void Start()
     {
@@ -21,18 +28,24 @@ public abstract class CircuitPort : CircuitBase
     }
     public override void Init()
     {
+        audioSource = GetComponent<AudioSource>();
         _parentObject = transform.parent.gameObject;
         BindEvent(_parentObject, OnBodyDrag, Define.MouseEvent.BodyDrag);
         BindEvent(gameObject, OnBeginDrag, Define.MouseEvent.ConnectBeginDrag);
         BindEvent(gameObject, OnDrag, Define.MouseEvent.ConnectDrag);
         BindEvent(gameObject, OnEndDrag, Define.MouseEvent.ConnectEndDrag);
+
+        dragAudioClip = GameManager.Resource.Load<AudioClip>("Sounds/Effect/DragStart");
+        dropAudioClip = GameManager.Resource.Load<AudioClip>("Sounds/Effect/DropFailed");
+        connectAudioClip = GameManager.Resource.Load<AudioClip>("Sounds/Effect/Connected");
     }
 
     public abstract void OnBodyDrag(PointerEventData data);
 
     protected virtual void OnBeginDrag(PointerEventData data)
     {
-        Debug.Log("Port Begin Drag");
+        
+        // Debug.Log("Port Begin Drag");
         _isDragging = true;
 
         GameObject _lineObject = new GameObject("Line");
@@ -64,7 +77,7 @@ public abstract class CircuitPort : CircuitBase
 
     protected virtual void OnDrag(PointerEventData data)
     {
-        Debug.Log("Port Dragging");
+        // Debug.Log("Port Dragging");
 
         if (_isDragging == false || _line == null) return;
         
@@ -113,5 +126,23 @@ public abstract class CircuitPort : CircuitBase
         
 
         edgeCollider.SetPoints(points);
+    }
+
+    protected virtual void PlayDragSound()
+    {
+        audioSource.clip = dragAudioClip;
+        audioSource.Play();
+    }
+
+    protected virtual void PlayDropSound()
+    {
+        audioSource.clip = dropAudioClip;
+        audioSource.Play();
+    }
+
+    protected virtual void PlayConnectSound()
+    {
+        audioSource.clip = connectAudioClip;
+        audioSource.Play();
     }
 }

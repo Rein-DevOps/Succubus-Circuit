@@ -1,48 +1,51 @@
 {
-    "stages": [
-      {
-        "stageNumber": 1,
-        "gateType": "NotGate",
-        "inputs": [
-          [0, 1]
-        ],
-        "outputs": [
-          [1, 0]
-        ]
-      },
-      {
-        "stageNumber": 2,
-        "gateType": "AndGate",
-        "inputs": [
-          [0, 0, 1, 1],
-          [0, 1, 0, 1]
-        ],
-        "outputs": [
-          [0, 0, 0, 1]
-        ]
-      },
-      {
-        "stageNumber": 3,
-        "gateType": "OrGate",
-        "inputs": [
-          [0, 0, 1, 1],
-          [0, 1, 0, 1]
-        ],
-        "outputs": [
-          [0, 1, 1, 1]
-        ]
-      },
-      {
-        "stageNumber": 4,
-        "gateType": "XorGate",
-        "inputs": [
-          [0, 0, 1, 1],
-          [0, 1, 0, 1]
-        ],
-        "outputs": [
-          [0, 1, 1, 0]
-        ]
-      }
-    ]
-  }
-  
+  "stages": [
+    {
+      "stageNumber": 1,
+      "gateType": "NotGate",
+      "inputs": [
+        [0, 1]
+      ],
+      "outputs": [
+        [1, 0]
+      ],
+      "infoText": "이번 스테이지에서는 NOT 게이트를 구성합니다. NOT 게이트는 입력 신호를 반전시킵니다."
+    },
+    {
+      "stageNumber": 2,
+      "gateType": "AndGate",
+      "inputs": [
+        [0, 0, 1, 1],
+        [0, 1, 0, 1]
+      ],
+      "outputs": [
+        [0, 0, 0, 1]
+      ],
+      "infoText": "이번 스테이지에서는 AND 게이트를 구성합니다. 두 입력이 모두 1일 때 출력이 1이 됩니다."
+    },
+    {
+      "stageNumber": 3,
+      "gateType": "OrGate",
+      "inputs": [
+        [0, 0, 1, 1],
+        [0, 1, 0, 1]
+      ],
+      "outputs": [
+        [0, 1, 1, 1]
+      ],
+      "infoText": "이번 스테이지에서는 OR 게이트를 구성합니다. 두 입력 중 하나라도 1이면 출력이 1이 됩니다."
+    },
+    {
+      "stageNumber": 4,
+      "gateType": "XorGate",
+      "inputs": [
+        [0, 0, 1, 1],
+        [0, 1, 0, 1]
+      ],
+      "outputs": [
+        [0, 1, 1, 0]
+      ],
+      "infoText": "이번 스테이지에서는 XOR 게이트를 구성합니다. 두 입력이 서로 다를 때 출력이 1이 됩니다."
+    }
+  ]
+}

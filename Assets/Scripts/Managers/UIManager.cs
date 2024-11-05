@@ -27,6 +27,16 @@ public class UIManager
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;
+        if (sort)
+        {
+            canvas.sortingOrder = _order;
+            _order++;
+        }
+
+        else
+        {
+            canvas.sortingOrder = 0;
+        }
     }
 
     public T ShowSceneUI<T>(string name = null) where T : UIScene

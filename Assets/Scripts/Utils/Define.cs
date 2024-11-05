@@ -23,6 +23,8 @@ public class Define
         ConnectBeginDrag,
         ConnectDrag,
         ConnectEndDrag,
+
+        UISelect,
     }
 
     public enum Stage
@@ -44,5 +46,11 @@ public class Define
 
     }
 
-
+    public enum Sound
+    {
+        Bgm,
+        Effect,
+        MaxCount,
+        
+    }
 }

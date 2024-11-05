@@ -10,8 +10,8 @@ public class InputPort : CircuitPort
 
     public override void OnBodyDrag(PointerEventData data)
     {
-        Debug.Log("InputPort OnBodyDrag Called.");
-        Debug.Log($"{_connectedOutput}");
+        // Debug.Log("InputPort OnBodyDrag Called.");
+        // Debug.Log($"{_connectedOutput}");
         if (_connectedOutput == null) return;
 
         _connectedOutput.OnBodyDrag(data);
@@ -19,16 +19,14 @@ public class InputPort : CircuitPort
 
     protected override void OnBeginDrag(PointerEventData data)
     {
-        Debug.Log("InputPort Begin Drag");
-
+        // Debug.Log("InputPort Begin Drag");
         Disconnect(_connectedOutput);
-        
         base.OnBeginDrag(data);
     }
 
     protected override void OnEndDrag(PointerEventData data)
     {
-        Debug.Log("InputPort End Drag");
+        // Debug.Log("InputPort End Drag");
 
         if (_isDragging == false || _line == null) return;
 
@@ -36,30 +34,33 @@ public class InputPort : CircuitPort
         Ray ray = Camera.main.ScreenPointToRay(data.position);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 20.0f, layerMask);
 
-        Debug.Log("InputPort Drag End");
+        // Debug.Log("InputPort Drag End");
 
         // OutputPort가 아닐 경우 연결 불가능
         if (hit.collider != null)
         {
-            Debug.Log("InputPort Connected");
+            // Debug.Log("InputPort Connected");
             OutputPort targetPort = hit.collider.GetComponent<OutputPort>();
 
             // 동일한 parent Object일 경우 연결 불가능
             if (transform.parent.gameObject == targetPort.transform.parent.gameObject)
             {
                 // 추후 화면에 메시지 띄울 것
-                Debug.Log("Same parent object");
+                // Debug.Log("Same parent object");
                 Destroy(_line.gameObject);
                 _line = null;
+                PlayDropSound();
                 return;
             }
 
             _connectedOutput = targetPort;
             _line.SetPosition(1, targetPort.transform.position);
+            PlayConnectSound();
             SetConnect(targetPort, _line.gameObject);
         }
         else
         {
+            PlayDropSound();
             Disconnect(_connectedOutput);
         }
         _isDragging = false;
@@ -67,13 +68,13 @@ public class InputPort : CircuitPort
 
     public override void SetConnect(CircuitPort port, GameObject lineObject = null)
     {
-        Debug.Log("Connect with OutputPort");
+        // Debug.Log("Connect with OutputPort");
         if (port is OutputPort outputPort)
         {
             // OutputPort에서 InputPort에 연결 시도
             if (lineObject == null)
             {
-                Disconnect();
+                Disconnect(_connectedOutput);
                 _connectedOutput = outputPort;
                 // 
             }

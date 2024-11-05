@@ -14,7 +14,7 @@ public class OutputPort : CircuitPort
 
     public override void OnBodyDrag(PointerEventData data)
     {
-        Debug.Log("BodyDrag of Output Called");
+        // Debug.Log("BodyDrag of Output Called");
         for (int i = 0; i < _connectedInputs.Count; i++)
         {
             if (_lines[i].GetPosition(0) != new Vector3(data.position.x, data.position.y, 0))
@@ -28,7 +28,7 @@ public class OutputPort : CircuitPort
     }
     protected override void OnEndDrag(PointerEventData data)
     {
-        Debug.Log("OutputPort End Drag");
+        // Debug.Log("OutputPort End Drag");
 
         if (_isDragging == false || _line == null) return;
 
@@ -36,32 +36,35 @@ public class OutputPort : CircuitPort
         Ray ray = Camera.main.ScreenPointToRay(data.position);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 20.0f, layerMask);
 
-        Debug.Log("OutputPort Drag End");
+        // Debug.Log("OutputPort Drag End");
 
         // InputPort가 아닐 경우 연결 불가능
         if (hit.collider != null)
         {
-            Debug.Log("OutputPort Connected");
+            // Debug.Log("OutputPort Connected");
             InputPort targetPort = hit.collider.GetComponent<InputPort>();
             
             // 동일한 parent Object일 경우 연결 불가능
             if(transform.parent.gameObject == targetPort.transform.parent.gameObject)
             {
                 // 추후 화면에 메시지 띄울 것
-                Debug.Log("Same parent object");
+                // Debug.Log("Same parent object");
                 Disconnect();
+                PlayDropSound();
                 return;
             }
 
             // 동일한 InputPort에 연결할 경우 연결 불가능
             if (_connectedInputs.Contains(targetPort))
             {
-                Debug.Log("Trying connect to same line");
+                // Debug.Log("Trying connect to same line");
                 Disconnect();
+                PlayDropSound();
                 return;
             }
 
             SetConnect(targetPort);
+            PlayConnectSound();
         }
         else
         {
@@ -101,9 +104,9 @@ public class OutputPort : CircuitPort
 
     public void DisconnectAll()
     {
-        foreach (var inputPort in _connectedInputs)
+        for (int i = _connectedInputs.Count - 1; i >= 0; i--)
         {
-            Disconnect(inputPort);
+            Disconnect(_connectedInputs[i]);
         }
     }
 
@@ -119,7 +122,7 @@ public class OutputPort : CircuitPort
                 _lines.RemoveAt(index);
             }
 
-            Debug.Log("OutputPort Disconnected from inputPort");
+            // Debug.Log("OutputPort Disconnected from inputPort");
         }
     }
 
@@ -145,10 +148,10 @@ public class OutputPort : CircuitPort
     
     public void UpdateLinePosition()
     {
-        Debug.Log("Outport Update Position Called");
+        // Debug.Log("Outport Update Position Called");
         if (_line != null && _connectedInputs.Count > 0 && _lines.Count == _connectedInputs.Count)
         {
-            Debug.Log("Outport Line is not null");
+            // Debug.Log("Outport Line is not null");
 
             for (int i = 0; i < _lines.Count; i++){
                 InputPort connectedInput = _connectedInputs[i];
