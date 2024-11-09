@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public static class Util
 {
-    public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
+    public static T GetOrAddComponent<T>(GameObject go) where T : Component
     {
         T component= go.GetComponent<T>();
         if (component == null)
@@ -12,9 +12,10 @@ public static class Util
         return component;
     }
 
-    public static void BindEvent(this GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
+    public static RaycastHit2D MouseRaycast(float distance = 20.0f, int layerMask = Physics2D.DefaultRaycastLayers)
     {
-        UIBase.BindEvent(go, action, type);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        return Physics2D.Raycast(ray.origin, ray.direction, distance, layerMask);
     }
     
     public static GameObject FindChild(GameObject go, string name = null, bool recursive = false)
@@ -33,8 +34,6 @@ public static class Util
         if (go == null)
             return null;
         
-
-
         if (recursive == false)
         {
             for (int i = 0; i < go.transform.childCount; i++)

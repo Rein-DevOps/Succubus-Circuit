@@ -4,6 +4,9 @@ using UnityEngine.EventSystems;
 
 public class InputPort : CircuitPort
 {
+    private CircuitBodyController currentBodyController;
+    private CircuitLine
+
     private Signal _signal = null;
     private OutputPort _connectedOutput = null;
     public OutputPort ConnectedOutput => _connectedOutput;
@@ -60,8 +63,9 @@ public class InputPort : CircuitPort
         }
         else
         {
+            Debug.Break();
             PlayDropSound();
-            Disconnect(_connectedOutput);
+            // Disconnect(_connectedOutput);
         }
         _isDragging = false;
     }

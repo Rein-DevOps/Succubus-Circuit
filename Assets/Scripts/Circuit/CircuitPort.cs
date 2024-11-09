@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -72,7 +70,7 @@ public abstract class CircuitPort : CircuitBase
         _line.startWidth = 0.04f;
         _line.endWidth = 0.04f;
         _line.material = new Material(Shader.Find("Sprites/Default"));
-        _line.useWorldSpace = true;
+        // _line.useWorldSpace = true;
     }
 
     protected virtual void OnDrag(PointerEventData data)

@@ -8,9 +8,9 @@ public abstract class CircuitBase : MonoBehaviour
 
     // Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
     
-    public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.MouseEvent type = Define.MouseEvent.Click)
+    public static void BindEvent(GameObject go, Action<Vector3> action, Define.MouseEvent type = Define.MouseEvent.Click)
     {
-        CircuitHandler handler = Util.GetOrAddComponent<CircuitHandler>(go);
+        CircuitDragHandler handler = Util.GetOrAddComponent<CircuitDragHandler>(go);
         
         switch(type)
         {
@@ -18,7 +18,7 @@ public abstract class CircuitBase : MonoBehaviour
                 handler.OnDragHandler -= action;
                 handler.OnDragHandler += action;
                 break;
-
+            
             case Define.MouseEvent.ConnectDrag:
                 handler.OnDragHandler -= action;
                 handler.OnDragHandler += action;

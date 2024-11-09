@@ -4,36 +4,29 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState
-    {
-        Unknown,
-        Menu,
-        Dialogue,
-        Circuit,
-    }
-
-    private static GameManager s_instance;
+    public static Define.Scene currScene;
+    private static GameManager _instance;
     public static GameManager Instance
     {
         get
         {
-            if (s_instance == null)
+            if (_instance == null)
             {
-                s_instance = FindObjectOfType<GameManager>();
-                if (s_instance == null)
+                _instance = FindFirstObjectByType(typeof(GameManager)) as GameManager;
+
+                if (_instance == null)
                 {
                     GameObject gameManager = new GameObject("@GameManager");
-                    s_instance = gameManager.AddComponent<GameManager>();
+                    _instance = gameManager.AddComponent<GameManager>();
                     DontDestroyOnLoad(gameManager);
                 }
             }
-            return s_instance;
+            return _instance;
         }
     }
-    public static Define.Scene currScene = Define.Scene.Menu;
 
-    CircuitManager _circuit;
-    InputManager _input;
+    CircuitManager _circuit = new CircuitManager();
+    InputManager _input; 
     UIManager _ui;
     ResourceManager _resource;
     SoundManager _sound;
@@ -48,9 +41,9 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (s_instance == null)
+        if (_instance == null)
         {
-            s_instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
 
             // Initialize manager instances
@@ -61,7 +54,7 @@ public class GameManager : MonoBehaviour
             _sound = new SoundManager();
             _stage = new StageManager();
         }
-        else if (s_instance != this)
+        else if (_instance != this)
         {
             Destroy(gameObject);
         }
@@ -69,8 +62,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        currScene = Define.Scene.Menu;
-        Circuit.Init();
+        currScene = (Define.Scene) SceneManager.GetActiveScene().buildIndex;
+        // Circuit.Init();
         Debug.Log($"CurrScene: {currScene}");
     }
 
@@ -81,37 +74,21 @@ public class GameManager : MonoBehaviour
 
     public static void Clear()
     {
-        Circuit.Clear();
+        // Circuit.Clear();
     }
 
-    public static void SceneChange(Define.Scene scene = Define.Scene.Menu, int stageNum = 0)
+    public static void LoadScene(Define.Scene scene, int stageNum = 0)
     {
         if (scene == Define.Scene.Menu)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene((int) scene);
             currScene = Define.Scene.Menu;
         }
         else
         {
             Clear();
-            SceneManager.LoadScene((int)scene);
+            SceneManager.LoadScene((int) scene);
             currScene = (Define.Scene)stageNum;
-        }
-    }
-
-    public static void BgmSoundChange(Define.Scene scene)
-    {
-        if (scene == currScene) return;
-
-        if ((int)currScene > 0 && (int)scene > 0) return;
-
-        if (scene == Define.Scene.Menu)
-        {
-            Sound.Play("Sounds/Bgm/MainBgm");
-        }
-        else
-        {
-            Sound.Play("Sounds/Bgm/CircuitBgm");
         }
     }
 }

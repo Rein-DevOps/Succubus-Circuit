@@ -1,25 +1,17 @@
-using NUnit.Framework.Constraints;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
-public class PlayerController : MonoBehaviour
+
+public class CircuitLineController : MonoBehaviour, IDraggable, IConnectable
 {
-    public GameObject selectedObject = null;
-    private enum SelectedType
-    {
-        None,
-        Body,
-        Line
-    }
+    private bool IsSelected = false;
 
-    SelectedType selectedType = SelectedType.None;
-
-    void Start()
+    void OnEnable()
     {
-        GameManager.Input.MouseAction -= OnMouseClicked;
-        GameManager.Input.MouseAction += OnMouseClicked;
+        if (GameManager.currScene == Define.Scene.Stage)
+        {
+            GameManager.Input.MouseAction -= OnMouseClicked;
+            GameManager.Input.MouseAction += OnMouseClicked;
+        }
     }
 
     void OnMouseClicked(Define.MouseEvent evt)
@@ -38,9 +30,6 @@ public class PlayerController : MonoBehaviour
             // Debug.Log("On Mouse Select Called");
             Deselect(selectedObject);
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            //int bodyLayerMask = LayerMask.GetMask("Body");
-            //Debug.Log("Body LayerMask: " + bodyLayerMask);  // LayerMask 값 확인
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, 20.0f, LayerMask.GetMask("Body") | LayerMask.GetMask("Line"));
 
             if (hit.collider != null)
@@ -49,7 +38,7 @@ public class PlayerController : MonoBehaviour
                 if (hitLayer == LayerMask.NameToLayer("Body"))
                 {
                     // Debug.Log("On Body Select Called");
-                    selectedType = SelectedType.Body;
+                    selectedType = SelectType.Body;
                     GameObject clickedBody = hit.transform.gameObject;
                     selectedObject = clickedBody;
                     
@@ -65,7 +54,7 @@ public class PlayerController : MonoBehaviour
                 if (hitLayer == LayerMask.NameToLayer("Line"))
                 {
                     // Debug.Log("On Line Select Called");
-                    selectedType = SelectedType.Line;
+                    selectedType = SelectType.Line;
                     GameObject ClickedLine = hit.transform.gameObject;
                     selectedObject = ClickedLine;
 
@@ -85,7 +74,7 @@ public class PlayerController : MonoBehaviour
             /*
             else if (Physics2D.Raycast(mousePos, Vector2.zero, 20.0f, LayerMask.GetMask("Line")))
             {
-                selectedType = SelectedType.Line;
+                selectedType = SelectType.Line;
                 GameObject clickedBody = hit.transform.gameObject;
             }
             */
@@ -104,20 +93,37 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Deselect Called !");
         switch(selectedType)
         {
-            case SelectedType.None:
+            case SelectType.None:
                 break;
 
-            case SelectedType.Body:
+            case SelectType.Body:
                 Transform selectedCircle = selectedObject.transform.parent.Find("SelectedCircle");
                 selectedCircle.gameObject.SetActive(false);
                 break;
-            case SelectedType.Line:
+            case SelectType.Line:
                 LineRenderer line = selectedObject.GetComponent<LineRenderer>();
                 line.startColor = Color.white;
                 line.endColor = Color.white;
                 break;
         }
-        selectedType = SelectedType.None;
+        selectedType = SelectType.None;
         selectedObject = null;
+    }
+
+
+
+    private void HandleConnectBegin(Vector3 mousePos)
+    {
+
+    }
+
+    private void HandleConnect(Vector3 mousePos)
+    {
+
+    }
+
+    private void HandleConnectEnd(Vector3 mousePos)
+    {
+
     }
 }

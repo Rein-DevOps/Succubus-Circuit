@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CircuitBody : CircuitBase
+public class CircuitBody : MonoBehaviour
 {
+    Vector3 
     void Start()
     {
         Init();

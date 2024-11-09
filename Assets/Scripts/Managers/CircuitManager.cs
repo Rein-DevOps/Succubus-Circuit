@@ -5,8 +5,8 @@ public class CircuitManager
 {
     public GameObject selectedObj;
     private List<GameObject> Circuits = new();
-    public GameObject outcome;
     public List<GameObject> Switches = new();
+    public List<GameObject> outcome = new();
     public bool IsCorrect = false;
     
 
