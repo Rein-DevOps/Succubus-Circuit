@@ -15,7 +15,7 @@ public class Switch : GateBase
 
 
 
-        GameManager.Circuit.SetSwitch(gameObject);
+        // GameManager.Circuit.SetSwitch(gameObject);
         SetDataSequence(_dataSequence);
         Debug.Log($"{gameObject.name} initialized with {_dataSequence.Count} data points.");
     }

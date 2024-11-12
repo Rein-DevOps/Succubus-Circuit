@@ -58,11 +58,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        currScene = Define.Scene.Stage;
     }
 
     void Start()
     {
-        currScene = (Define.Scene) SceneManager.GetActiveScene().buildIndex;
+        currScene = Define.Scene.Stage;
         // Circuit.Init();
         Debug.Log($"CurrScene: {currScene}");
     }

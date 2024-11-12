@@ -80,13 +80,13 @@ public class UIGateButton : UIScene
     public void OnGateMake(PointerEventData data)
     {
         Debug.Log("Gate Make Button Called");
-        GameManager.Circuit.InstantiateCircuit();
+        // GameManager.Circuit.InstantiateCircuit();
     }
 
     public void OnObjectDelete(PointerEventData data)
     {
         Debug.Log("Gate Delete Button Called");
-        GameManager.Circuit.Delete();
+        // GameManager.Circuit.Delete();
     }
 
     public void OnTest(PointerEventData data)

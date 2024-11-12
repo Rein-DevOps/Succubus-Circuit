@@ -55,6 +55,6 @@ public class UIStageInfo : UIPopup
     public void OnGateMake(PointerEventData data)
     {
         Debug.Log("Gate Make Button Called");
-        GameManager.Circuit.InstantiateCircuit();
+        // GameManager.Circuit.InstantiateCircuit();
     }
 }

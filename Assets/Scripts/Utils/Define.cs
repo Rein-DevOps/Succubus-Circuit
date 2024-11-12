@@ -9,6 +9,7 @@ public class Define
 
     public enum MouseEvent
     {
+        None,
         Click,
         Press,
         Release,

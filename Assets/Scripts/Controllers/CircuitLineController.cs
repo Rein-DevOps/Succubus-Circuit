@@ -1,129 +1,59 @@
 using UnityEngine;
 
-
-public class CircuitLineController : MonoBehaviour, IDraggable, IConnectable
+public class CircuitLineController : MonoBehaviour, ISelectable
 {
-    private bool IsSelected = false;
+    private bool _IsSelected = false;
+    private LineRenderer _line = null;
+
+    private void Awake()
+    {
+        _line = GetComponent<LineRenderer>();
+    }
+
+    private void OnInteraction(Define.MouseEvent mouseEvent, Vector2 mousePos)
+    {
+        switch(mouseEvent)
+        {
+            case Define.MouseEvent.None:
+                OnDeselect();
+                break;
+
+            case Define.MouseEvent.Click:
+                OnSelect();
+                break;
+            
+            default:
+                break;
+        }
+    }
 
     void OnEnable()
     {
         if (GameManager.currScene == Define.Scene.Stage)
         {
-            GameManager.Input.MouseAction -= OnMouseClicked;
-            GameManager.Input.MouseAction += OnMouseClicked;
+            GameManager.Input.Subscribe(gameObject, OnInteraction);
         }
     }
 
-    void OnMouseClicked(Define.MouseEvent evt)
+    void OnDisable()
     {
-        /*
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            Debug.Log("Clicked on UI element. Selection ignored.");
-            return;
-        }
-        */
-        
-        // Debug.Log("On Mouse Click Called");
-        if (evt == Define.MouseEvent.Select)
-        {
-            // Debug.Log("On Mouse Select Called");
-            Deselect(selectedObject);
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, 20.0f, LayerMask.GetMask("Body") | LayerMask.GetMask("Line"));
-
-            if (hit.collider != null)
-            {
-                int hitLayer = hit.collider.gameObject.layer;
-                if (hitLayer == LayerMask.NameToLayer("Body"))
-                {
-                    // Debug.Log("On Body Select Called");
-                    selectedType = SelectType.Body;
-                    GameObject clickedBody = hit.transform.gameObject;
-                    selectedObject = clickedBody;
-                    
-                    Transform selectedCircle = selectedObject.transform.parent.Find("SelectedCircle");
-                    if (selectedCircle != null)
-                    {
-                        selectedCircle.gameObject.SetActive(true);
-                    }
-                    // Debug.Log("Gate Select Called!");
-                    GameManager.Circuit.Select(selectedObject);
-                }
-
-                if (hitLayer == LayerMask.NameToLayer("Line"))
-                {
-                    // Debug.Log("On Line Select Called");
-                    selectedType = SelectType.Line;
-                    GameObject ClickedLine = hit.transform.gameObject;
-                    selectedObject = ClickedLine;
-
-                    LineRenderer line = selectedObject.GetComponent<LineRenderer>();
-                    Color pink = new Color(255 / 255f, 0 / 255f, 177 / 255f, 1f);
-                    line.startColor = pink;
-                    line.endColor = pink;
-
-                    // Debug.Log("Line Select Called!");
-                    GameManager.Circuit.Select(selectedObject);
-                }
-
-
-            }
-
-
-            /*
-            else if (Physics2D.Raycast(mousePos, Vector2.zero, 20.0f, LayerMask.GetMask("Line")))
-            {
-                selectedType = SelectType.Line;
-                GameObject clickedBody = hit.transform.gameObject;
-            }
-            */
-        }
-
-        if (evt == Define.MouseEvent.Click)
-        {
-
-        }
+        GameManager.Input.Unsubscribe(gameObject, OnInteraction);
     }
 
-    void Deselect(GameObject go = null)
+    public void OnSelect()
     {
-        if (go == null) return;
+        _IsSelected = true;
 
-        Debug.Log("Deselect Called !");
-        switch(selectedType)
-        {
-            case SelectType.None:
-                break;
-
-            case SelectType.Body:
-                Transform selectedCircle = selectedObject.transform.parent.Find("SelectedCircle");
-                selectedCircle.gameObject.SetActive(false);
-                break;
-            case SelectType.Line:
-                LineRenderer line = selectedObject.GetComponent<LineRenderer>();
-                line.startColor = Color.white;
-                line.endColor = Color.white;
-                break;
-        }
-        selectedType = SelectType.None;
-        selectedObject = null;
+        Color pink = new Color(255 / 255f, 0 / 255f, 177 / 255f, 1f);
+        _line.startColor = pink;
+        _line.endColor = pink;
     }
 
-
-
-    private void HandleConnectBegin(Vector3 mousePos)
+    public void OnDeselect()
     {
+        _IsSelected = false;
 
-    }
-
-    private void HandleConnect(Vector3 mousePos)
-    {
-
-    }
-
-    private void HandleConnectEnd(Vector3 mousePos)
-    {
-
+        _line.startColor = Color.white;
+        _line.endColor = Color.white;
     }
 }

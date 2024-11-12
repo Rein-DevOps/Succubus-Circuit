@@ -8,11 +8,11 @@ using UnityEngine.UIElements;
 
 public class InputManager
 {
-    private GameObject selectedObject;
+    private GameObject _selectedObject;
     public GameObject SelectedObject
     {
-        get { return selectedObject; }
-        private set { selectedObject = value; }
+        get { return _selectedObject; }
+        private set { _selectedObject = value; }
     }
 
     private Define.CircuitComponent selectedComponent = Define.CircuitComponent.None;
@@ -29,7 +29,10 @@ public class InputManager
     {
         if (GameManager.currScene == Define.Scene.Stage)
         {
+            
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // Debug.Log($"Mouse Position: {Input.mousePosition}");
+            // Debug.Log($"Converted Position: {mousePos}");
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -37,10 +40,11 @@ public class InputManager
                 {
                     interActions[SelectedObject].Invoke(Define.MouseEvent.None, mousePos);
                 }
-
+                
                 RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, 20.0f);
                 selectedComponent = GetSelectedComponentType(hit);
                 
+                Debug.Log($"Selected Component: {selectedComponent}");
                 if (selectedComponent != Define.CircuitComponent.None)
                 {
                     interActions[hit.collider.gameObject]?.Invoke(Define.MouseEvent.Click, mousePos);
@@ -51,7 +55,7 @@ public class InputManager
             {
                 if (selectedComponent == Define.CircuitComponent.None) return;
 
-                interActions[SelectedObject].Invoke(Define.MouseEvent.Press, mousePos);
+                interActions[SelectedObject]?.Invoke(Define.MouseEvent.Press, mousePos);
             }
 
             else if (Input.GetMouseButtonUp(0))
@@ -59,7 +63,8 @@ public class InputManager
                 if (selectedComponent == Define.CircuitComponent.None) return;
 
                 selectedComponent = Define.CircuitComponent.None;
-                interActions[SelectedObject].Invoke(Define.MouseEvent.Release, mousePos);
+                Debug.Log($"SelectedObject {SelectedObject}");
+                interActions[SelectedObject]?.Invoke(Define.MouseEvent.Release, mousePos);
             }
         }
     }
@@ -93,7 +98,7 @@ public class InputManager
         interActions.Clear();
     }
 
-    private Define.CircuitComponent GetSelectedComponentType(RaycastHit2D hit)
+    public Define.CircuitComponent GetSelectedComponentType(RaycastHit2D hit)
     {
         if (hit.collider == null) return Define.CircuitComponent.None;
         if (IsPointerOverCircuitBody(hit)) return Define.CircuitComponent.Body;
@@ -103,32 +108,40 @@ public class InputManager
         return Define.CircuitComponent.None;
     }
 
-    private bool IsPointerOverCircuitBody(RaycastHit2D hit)
+    public bool IsPointerOverCircuitBody(RaycastHit2D hit)
     {
+        if (hit.collider == null) return false;
+
         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Body"))
             return true;
         
         return false;
     }
 
-    private bool IsPointerOverCircuitLine(RaycastHit2D hit)
+    public bool IsPointerOverCircuitLine(RaycastHit2D hit)
     {
+        if (hit.collider == null) return false;
+
         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Line"))
             return true;
         
         return false;
     }
 
-    private bool IsPointerOverCircuitInputPort(RaycastHit2D hit)
+    public bool IsPointerOverCircuitInputPort(RaycastHit2D hit)
     {
+        if (hit.collider == null) return false;
+
         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("InputPort"))
             return true;
         
         return false;
     }
 
-    private bool IsPointerOverCircuitOutputPort(RaycastHit2D hit)
+    public bool IsPointerOverCircuitOutputPort(RaycastHit2D hit)
     {
+        if (hit.collider == null) return false;
+
         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("OutputPort"))
             return true;
         

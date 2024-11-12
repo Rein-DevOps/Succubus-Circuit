@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class CircuitPort : CircuitBase
+public abstract class CircuitPort : MonoBehaviour
 {
     protected LineRenderer _line;
     protected Vector3 _startPosition;
@@ -24,15 +24,9 @@ public abstract class CircuitPort : CircuitBase
     {
         Init();
     }
-    public override void Init()
+    public void Init()
     {
         audioSource = GetComponent<AudioSource>();
-        _parentObject = transform.parent.gameObject;
-        BindEvent(_parentObject, OnBodyDrag, Define.MouseEvent.BodyDrag);
-        BindEvent(gameObject, OnBeginDrag, Define.MouseEvent.ConnectBeginDrag);
-        BindEvent(gameObject, OnDrag, Define.MouseEvent.ConnectDrag);
-        BindEvent(gameObject, OnEndDrag, Define.MouseEvent.ConnectEndDrag);
-
         dragAudioClip = GameManager.Resource.Load<AudioClip>("Sounds/Effect/DragStart");
         dropAudioClip = GameManager.Resource.Load<AudioClip>("Sounds/Effect/DropFailed");
         connectAudioClip = GameManager.Resource.Load<AudioClip>("Sounds/Effect/Connected");
@@ -113,6 +107,7 @@ public abstract class CircuitPort : CircuitBase
             edgeCollider.gameObject.layer = _lineLayer;
         };
 
+        // Vector2 offset = 
         Vector2 localStart = go.transform.InverseTransformPoint(startPos);
         Vector2 localEnd = go.transform.InverseTransformPoint(endPos);
 

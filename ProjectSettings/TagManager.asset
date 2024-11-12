@@ -15,8 +15,8 @@ TagManager:
   - 
   - 
   - Body
-  - Inputport
-  - Outputport
+  - InputPort
+  - OutputPort
   - Line
   - Switch
   - 
